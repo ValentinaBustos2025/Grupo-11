@@ -4,11 +4,12 @@ import pandas as pd
 from scipy.integrate import trapezoid
 import re
 
+print("\nPunto 1")
 
 def prom(array):
     return np.sum(array) / np.size(array)
 
-df1 = pd.read_csv("Taller 1\Rhodium.csv")
+df1 = pd.read_csv("Tarea 1\Rhodium.csv")
 
 array_wave = df1['Wavelength (pm)'].to_numpy(); array_inten = df1['Intensity (mJy)'].to_numpy()
 array_wave = np.append(array_wave, array_wave[-1]); array_inten = np.append(array_inten, array_inten[-1])
@@ -124,8 +125,8 @@ print("1.b)  Método: Restar modelo espectro de fondo")
 
 
 
-print("1.c ) máximo del espectro es: " + str(espectro_max) + ", el máximo del pico 1 es: " + str(pico1_max) + " yel máximo del pico 2 es: " + str(pico2_max))
-print("La anchura de el espectro de fondo es: " + str(round(anchura(espectro_x,espectro_y),2)) + ", la anchura del pico 1 es: " + str(anchura(pico1_x,pico1)) + " y la anchura del pico 2 es: " + str(anchura(pico2_x,pico2)))
+print("1.c ) máximo del espectro es: " + str(espectro_max) + ", el máximo del pico 1 es: " + str(round(pico1_max,2)) + " y el máximo del pico 2 es: " + str(round(pico2_max,2)))
+print("La anchura de el espectro de fondo es: " + str(round(anchura(espectro_x,espectro_y),2)) + ", la anchura del pico 1 es: " + str(round(anchura(pico1_x,pico1),2)) + " y la anchura del pico 2 es: " + str(round(anchura(pico2_x,pico2),2)))
 
 
 
@@ -139,8 +140,8 @@ plt.title("Limpieza")
 plt.xlabel("Wavelength (pm)")
 plt.ylabel("Intensity (mJy)")
 plt.grid(True)
-plt.savefig("Taller 1\limpieza.pdf")
-plt.show() 
+plt.savefig("Tarea 1\limpieza.pdf")
+#plt.show() 
 
 #plt.plot(array_wave_new, GetModel(array_wave_new,coeficientes[::-1])) #modelo
 #plt.plot(array_wave_new,array_inten_new) #datos filtraos
@@ -152,8 +153,8 @@ plt.title("Picos de Rayos x")
 plt.xlabel("Wavelength (pm)")
 plt.ylabel("Intensity (mJy)")
 plt.grid(True)
-plt.savefig("Taller 1\picos.pdf")
-plt.show() 
+plt.savefig("Tarea 1\picos.pdf")
+#plt.show() 
 
 #plt.scatter(pico1_x, pico1,marker='x',color= 'red')
 #plt.scatter(pico2_x, pico2,marker='x',color= 'red')
@@ -167,7 +168,7 @@ def procesar_linea(linea):
     return [float(num) for num in numeros]
 
 
-archivo = 'Taller 1/hysteresis.dat'
+archivo = 'Tarea 1/hysteresis.dat'
 with open(archivo, 'r') as file:
     lineas = file.readlines()
 
@@ -203,16 +204,36 @@ ax[1].set_title("Tiempo (ms) vs Campo Interno (A/m)")
 ax[0].set_xlabel("Tiempo (ms)")
 ax[1].set_ylabel("H (A/m)")
 ax[1].grid(True)
-plt.savefig("Taller 1\histérico.pdf")
-plt.show() 
+plt.savefig("Tarea 1\histérico.pdf")
+#plt.show() 
 
 
 #Punto 2.2
-for i in range(0,len(df)):
-    if df[1][i] == df[1][0] : 
-        T = round(1/((df[0][i]*2)*10e-3),2)
+t = df[0].values / 1000  
+B = df[1].values  
 
-print("El periodo es {0} Hz".format(T))
+
+B_fft = np.fft.fft(B)
+
+
+frecuencias = np.fft.fftfreq(len(B), d=(t[1] - t[0]))  
+
+
+frecuencias_positivas = frecuencias[:len(frecuencias)//2]
+B_fft_positiva = B_fft[:len(B_fft)//2]
+
+
+magnitudes = np.abs(B_fft_positiva)
+indice_max = np.argmax(magnitudes)
+
+
+frecuencia_dominante = frecuencias_positivas[indice_max]
+
+print("\nPunto 2")
+
+print(f"La frecuencia es: {frecuencia_dominante:.2f} Hz")
+print("Se aplica la transformada de Fourier a la señal del campo magnético B para convertirla al dominio de la frecuencia. \
+      La frecuencia dominante se obtiene al identificar el pico más alto en el espectro de frecuencias resultante.")
 
 
 #Punto 2.3
@@ -222,8 +243,8 @@ plt.title("Histerésis Magnética")
 plt.xlabel("H (A/m)")
 plt.ylabel("B (mT)")
 plt.grid(True)
-plt.savefig("Taller 1\energy.pdf")
-plt.show() 
+plt.savefig("Tarea 1\energy.pdf")
+#plt.show() 
 
 area_hysteresis = np.trapz(df[2], df[1])
-print(area_hysteresis)
+print("Energía perdida: " + str(round(area_hysteresis,2)) + " J/m³")
