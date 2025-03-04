@@ -323,10 +323,8 @@ def frame(i):
     punto.set_offsets([x[i],y[i]])
     return linea , punto
 
-#anim = animation.FuncAnimation(fig,frame,frames=range(1,len(sol.t)-1))
-#anim
-
-#anim.save("3.a.mp4",writer='ffmpeg',fps=30)
+anim = animation.FuncAnimation(fig,frame,frames=range(1,len(sol.t)-1))
+anim.save("Tarea 3/3.a.mp4",writer='ffmpeg',fps=30)
 
 def evento(t,Y,mu,alpha):
     x,y,vx,vy = Y
