@@ -353,4 +353,6 @@ plt.imshow(img_filtered,
            vmax=255)
 plt.axis('off') 
 plt.tight_layout()
-plt.savefig("Tarea 2/3.b.b.png", format="png", dpi=300, bbox_inches="tight") #GUARDA PNG
+plt.savefig("Tarea 2/3.b.b.png", format="png", dpi=300, bbox_inches="tight") #GUARDA PNG#
+
+#ajsjasa

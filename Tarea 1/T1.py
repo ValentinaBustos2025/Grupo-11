@@ -248,3 +248,5 @@ plt.savefig("Tarea 1\energy.pdf")
 
 area_hysteresis = np.trapz(df[2], df[1])
 print("Energía perdida: " + str(round(area_hysteresis,2)) + " J/m³")
+
+#sergiolamuerde
